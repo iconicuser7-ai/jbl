@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JBL Tune Beam 2 - Premium Wireless Earbuds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Poppins', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(20px);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 106, 0, 0.6);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-fade-in-scale {
+            animation: fadeInScale 0.8s ease-out forwards;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-bounce {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #ff6a00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.875rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: #ff6a00;
+            color: #000;
+            font-weight: 700;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(255, 106, 0, 0.5);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #ff7a1a;
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 106, 0, 0.7);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.95);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 9999px;
+            cursor: pointer;
+            background: transparent;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ff6a00;
+            color: #ff6a00;
+            transform: scale(1.05);
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(255, 106, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-10px);
+        }
+
+        .glass-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 106, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .section {
+            position: relative;
+            z-index: 10;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(to bottom, transparent, rgba(255, 106, 0, 0.05), transparent);
+        }
+
+        .spec-item {
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 0.875rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #ff6a00;
+        }
+
+        .review-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            border-color: rgba(255, 106, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stars {
+            color: #ff6a00;
+            font-size: 1.25rem;
+            letter-spacing: 0.2em;
+        }
+
+        .footer-link {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #ff6a00;
+        }
+
+        [data-animate] {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .stagger-1 { animation-delay: 0s; }
+        .stagger-2 { animation-delay: 0.1s; }
+        .stagger-3 { animation-delay: 0.2s; }
+        .stagger-4 { animation-delay: 0.3s; }
+        .stagger-5 { animation-delay: 0.4s; }
+
+        /* Background gradients */
+        .bg-gradient {
+            background: linear-gradient(to bottom right, #000 0%, #000 50%, rgba(255, 106, 0, 0.1) 100%);
+        }
+
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 106, 0, 0.1);
+            top: 20%;
+            left: 20%;
+        }
+
+        .glow-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 106, 0, 0.1);
+            bottom: 10%;
+            right: 20%;
+        }
+
+        .hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Gradients -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <canvas id="heroCanvas" class="hero-canvas"></canvas>
+
+        <div class="relative z-30 text-center px-4 max-w-4xl animate-fade-in-up">
+            <h1 class="hero-title animate-fade-in-scale" style="animation-delay: 0.3s;">
+                Feel Every Beat
+            </h1>
+            <p class="hero-subtitle animate-fade-in-up" style="animation-delay: 0.5s;">
+                JBL Tune Beam 2
+            </p>
+            <div class="flex gap-6 flex-wrap justify-center animate-fade-in-up" style="animation-delay: 0.7s;">
+                <button class="btn-primary">Buy Now</button>
+                <button class="btn-secondary">Explore Features</button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 animate-bounce">
+            <div class="text-orange-500 text-2xl">↓</div>
+        </div>
+    </section>
+
+    <!-- ==================== FEATURES SECTION ==================== -->
+    <section class="section py-20 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-5xl md:text-6xl font-black text-center mb-16 tracking-tight animate-fade-in-up">
+                Premium Features
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="feature-card animate-fade-in-up" style="animation-delay: 0s;">
+                    <div class="text-5xl mb-4">🎵</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Pure Bass Sound</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">JBL's signature bass tuning for immersive sound quality</p>
+                </div>
+
+                <div class="feature-card animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="text-5xl mb-4">🔇</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Active Noise Cancellation</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Industry-leading ANC technology blocks 40dB of noise</p>
+                </div>
+
+                <div class="feature-card animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="text-5xl mb-4">🔋</div>
+                    <h3 class="text-xl font-bold text-white mb-2">40+ Hours Battery</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Extended playtime with case: listen all week</p>
+                </div>
+
+                <div class="feature-card animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="text-5xl mb-4">💧</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Water Resistant</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">IPX5 rating for water and sweat resistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE SHOWCASE ==================== -->
+    <section class="section py-20 px-4 md:px-8 gradient-bg">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 animate-fade-in-up">
+                Engineering Excellence
+            </h2>
+
+            <div class="h-96 rounded-3xl overflow-hidden border border-white/10 backdrop-blur-xl bg-white/5 animate-fade-in-scale">
+                <canvas id="showcaseCanvas" class="w-full h-full"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SOUND EXPERIENCE ==================== -->
+    <section class="section py-20 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 animate-fade-in-up">
+                Sound Experience
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card animate-fade-in-up" style="animation-delay: 0s;">
+                    <div class="relative overflow-hidden h-32">
+                        <div class="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-transparent" style="animation: pulse 2s ease-in-out infinite;"></div>
+                    </div>
+                    <div class="text-4xl mb-4 relative z-10">✨</div>
+                    <h3 class="text-xl font-bold mb-2 relative z-10">Treble Clarity</h3>
+                    <p class="text-gray-400 text-sm relative z-10">Crystal clear highs for pristine detail</p>
+                </div>
+
+                <div class="glass-card animate-fade-in-up" style="animation-delay: 0.15s;">
+                    <div class="relative overflow-hidden h-32">
+                        <div class="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-transparent" style="animation: pulse 2s ease-in-out infinite; animation-delay: 0.3s;"></div>
+                    </div>
+                    <div class="text-4xl mb-4 relative z-10">🎼</div>
+                    <h3 class="text-xl font-bold mb-2 relative z-10">Mid-Range Warmth</h3>
+                    <p class="text-gray-400 text-sm relative z-10">Balanced vocals and instruments</p>
+                </div>
+
+                <div class="glass-card animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="relative overflow-hidden h-32">
+                        <div class="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-transparent" style="animation: pulse 2s ease-in-out infinite; animation-delay: 0.6s;"></div>
+                    </div>
+                    <div class="text-4xl mb-4 relative z-10">🔊</div>
+                    <h3 class="text-xl font-bold mb-2 relative z-10">Deep Bass</h3>
+                    <p class="text-gray-400 text-sm relative z-10">Powerful lows with impact</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SPECIFICATIONS ==================== -->
+    <section class="section py-20 px-4 md:px-8 gradient-bg">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 animate-fade-in-up">
+                Specifications
+            </h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="spec-item animate-fade-in-scale stagger-1">
+                    <div class="spec-label">Bluetooth</div>
+                    <div class="spec-value">5.3</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale stagger-2">
+                    <div class="spec-label">Battery Life</div>
+                    <div class="spec-value">40+ hrs</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale stagger-3">
+                    <div class="spec-label">Driver Size</div>
+                    <div class="spec-value">10.2mm</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale stagger-4">
+                    <div class="spec-label">Charge Time</div>
+                    <div class="spec-value">2 hrs</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale stagger-5">
+                    <div class="spec-label">Weight</div>
+                    <div class="spec-value">4.2g</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale" style="animation-delay: 0.5s;">
+                    <div class="spec-label">Frequency</div>
+                    <div class="spec-value">20-20kHz</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale" style="animation-delay: 0.6s;">
+                    <div class="spec-label">Impedance</div>
+                    <div class="spec-value">16Ω</div>
+                </div>
+                <div class="spec-item animate-fade-in-scale" style="animation-delay: 0.7s;">
+                    <div class="spec-label">Water Rating</div>
+                    <div class="spec-value">IPX5</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== REVIEWS ==================== -->
+    <section class="section py-20 px-4 md:px-8">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 animate-fade-in-up">
+                Loved by Audiophiles
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="review-card animate-fade-in-up" style="animation-delay: 0s;">
+                    <div class="stars mb-4">★★★★★</div>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed">"The sound quality is absolutely incredible. These earbuds rival my studio monitors. A game-changer for mobile production."</p>
+                    <p class="text-white font-semibold text-sm">Alex Johnson</p>
+                    <p class="text-gray-500 text-xs">Music Producer</p>
+                </div>
+
+                <div class="review-card animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="stars mb-4">★★★★★</div>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed">"The ANC is flawless. I can work in noisy environments without any distraction. Truly premium build quality."</p>
+                    <p class="text-white font-semibold text-sm">Sarah Chen</p>
+                    <p class="text-gray-500 text-xs">Audio Engineer</p>
+                </div>
+
+                <div class="review-card animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="stars mb-4">★★★★★</div>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed">"Best earbuds I've ever owned. Battery lasts forever, comfort is perfect for all-day wear. Worth every penny."</p>
+                    <p class="text-white font-semibold text-sm">Marcus Williams</p>
+                    <p class="text-gray-500 text-xs">Casual Listener</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FINAL CTA ==================== -->
+    <section class="section py-32 px-4 md:px-8">
+        <div class="max-w-4xl mx-auto text-center animate-fade-in-scale">
+            <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tight">
+                Ready to Feel Every Beat?
+            </h2>
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                Join thousands of satisfied customers experiencing the future of audio
+            </p>
+
+            <button class="relative px-12 py-6 text-lg font-bold rounded-full bg-orange-500 text-black hover:bg-orange-400 transition-all shadow-2xl hover:shadow-orange-500/80 overflow-hidden animate-glow">
+                <div class="absolute inset-0 btn-shimmer"></div>
+                <span class="relative z-10">Get Yours Now</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="section border-t border-white/10 py-12 px-4 md:px-8 bg-black/50 backdrop-blur-xl">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h4 class="font-bold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="footer-link">Features</a></li>
+                        <li><a href="#" class="footer-link">Specifications</a></li>
+                        <li><a href="#" class="footer-link">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="footer-link">Help Center</a></li>
+                        <li><a href="#" class="footer-link">Contact Us</a></li>
+                        <li><a href="#" class="footer-link">Warranty</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="footer-link">About</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
+                        <li><a href="#" class="footer-link">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="footer-link">Privacy</a></li>
+                        <li><a href="#" class="footer-link">Terms</a></li>
+                        <li><a href="#" class="footer-link">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <div>© 2024 JBL. All rights reserved.</div>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="footer-link">Twitter</a>
+                    <a href="#" class="footer-link">Instagram</a>
+                    <a href="#" class="footer-link">Facebook</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js Scene Scripts -->
+    <script>
+        // Global mouse position
+        let mousePos = { x: 0, y: 0 };
+
+        window.addEventListener('mousemove', (e) => {
+            mousePos.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mousePos.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // ==================== HERO CANVAS ====================
+        function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            const w = canvas.clientWidth;
+            const h = canvas.clientHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000, 0);
+
+            camera.position.z = 4;
+
+            // Create earbud group
+            const earbudGroup = new THREE.Group();
+            scene.add(earbudGroup);
+
+            // Left Earbud
+            const leftGeom = new THREE.SphereGeometry(0.35, 32, 32);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xff6a00,
+                metalness: 0.8,
+                roughness: 0.2,
+                emissive: 0xff6a00,
+                emissiveIntensity: 0.3,
+            });
+            const leftEarbud = new THREE.Mesh(leftGeom, material);
+            leftEarbud.position.x = -0.8;
+            earbudGroup.add(leftEarbud);
+
+            // Right Earbud
+            const rightEarbud = new THREE.Mesh(leftGeom, material.clone());
+            rightEarbud.position.x = 0.8;
+            earbudGroup.add(rightEarbud);
+
+            // Charging Case
+            const caseGeom = new THREE.BoxGeometry(1.8, 0.8, 1.2);
+            const caseMaterial = new THREE.MeshStandardMaterial({
+                color: 0x1a1a1a,
+                metalness: 0.6,
+                roughness: 0.3,
+                emissive: 0xff6a00,
+                emissiveIntensity: 0.15,
+            });
+            const caseBox = new THREE.Mesh(caseGeom, caseMaterial);
+            caseBox.position.y = -1.2;
+            earbudGroup.add(caseBox);
+
+            // Glow Sphere
+            const glowGeom = new THREE.SphereGeometry(2, 32, 32);
+            const glowMaterial = new THREE.MeshBasicMaterial({
+                color: 0xff6a00,
+                transparent: true,
+                opacity: 0.05,
+            });
+            const glowSphere = new THREE.Mesh(glowGeom, glowMaterial);
+            earbudGroup.add(glowSphere);
+
+            // Lights
+            const light1 = new THREE.PointLight(0xff6a00, 1.5);
+            light1.position.set(3, 3, 3);
+            scene.add(light1);
+
+            const light2 = new THREE.PointLight(0x1a1a2e, 0.8);
+            light2.position.set(-3, -3, -3);
+            scene.add(light2);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            // Particles
+            const particleCount = 100;
+            const particleGeom = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 20;
+                positions[i + 1] = (Math.random() - 0.5) * 20;
+                positions[i + 2] = (Math.random() - 0.5) * 20;
+            }
+
+            particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0xff6a00,
+                size: 0.08,
+                transparent: true,
+                opacity: 0.3,
+            });
+            const particles = new THREE.Points(particleGeom, particleMaterial);
+            scene.add(particles);
+
+            let animationId;
+            const animate = () => {
+                animationId = requestAnimationFrame(animate);
+
+                // Rotate earbuds
+                earbudGroup.rotation.y += 0.005;
+
+                // Float animation
+                earbudGroup.position.y = Math.sin(Date.now() * 0.001) * 0.3;
+
+                // Mouse interaction
+                earbudGroup.rotation.x = mousePos.y * 0.1;
+                earbudGroup.rotation.z = mousePos.x * 0.1;
+
+                // Rotate particles
+                particles.rotation.x += 0.0001;
+                particles.rotation.y += 0.0002;
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Handle resize
+            const handleResize = () => {
+                const newW = canvas.clientWidth;
+                const newH = canvas.clientHeight;
+                camera.aspect = newW / newH;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newW, newH);
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                cancelAnimationFrame(animationId);
+                window.removeEventListener('resize', handleResize);
+                renderer.dispose();
+            };
+        }
+
+        // ==================== SHOWCASE CANVAS ====================
+        function initShowcaseCanvas() {
+            const canvas = document.getElementById('showcaseCanvas');
+            if (!canvas) return;
+
+            const w = canvas.clientWidth;
+            const h = canvas.clientHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000, 0);
+
+            camera.position.z = 4;
+
+            // Create earbud group
+            const earbudGroup = new THREE.Group();
+            scene.add(earbudGroup);
+
+            // Left Earbud
+            const leftGeom = new THREE.SphereGeometry(0.35, 32, 32);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xff6a00,
+                metalness: 0.8,
+                roughness: 0.2,
+                emissive: 0xff6a00,
+                emissiveIntensity: 0.3,
+            });
+            const leftEarbud = new THREE.Mesh(leftGeom, material);
+            leftEarbud.position.x = -0.8;
+            earbudGroup.add(leftEarbud);
+
+            // Right Earbud
+            const rightEarbud = new THREE.Mesh(leftGeom, material.clone());
+            rightEarbud.position.x = 0.8;
+            earbudGroup.add(rightEarbud);
+
+            // Charging Case
+            const caseGeom = new THREE.BoxGeometry(1.8, 0.8, 1.2);
+            const caseMaterial = new THREE.MeshStandardMaterial({
+                color: 0x1a1a1a,
+                metalness: 0.6,
+                roughness: 0.3,
+                emissive: 0xff6a00,
+                emissiveIntensity: 0.15,
+            });
+            const caseBox = new THREE.Mesh(caseGeom, caseMaterial);
+            caseBox.position.y = -1.2;
+            earbudGroup.add(caseBox);
+
+            // Lights
+            const light1 = new THREE.PointLight(0xff6a00, 1.5);
+            light1.position.set(3, 3, 3);
+            scene.add(light1);
+
+            const light2 = new THREE.PointLight(0x1a1a2e, 0.8);
+            light2.position.set(-3, -3, -3);
+            scene.add(light2);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            let animationId;
+            const animate = () => {
+                animationId = requestAnimationFrame(animate);
+                earbudGroup.rotation.y += 0.003;
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Handle resize
+            const handleResize = () => {
+                const newW = canvas.clientWidth;
+                const newH = canvas.clientHeight;
+                camera.aspect = newW / newH;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newW, newH);
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => {
+                cancelAnimationFrame(animationId);
+                window.removeEventListener('resize', handleResize);
+                renderer.dispose();
+            };
+        }
+
+        // Initialize scenes
+        document.addEventListener('DOMContentLoaded', () => {
+            initHeroCanvas();
+            setTimeout(() => initShowcaseCanvas(), 500);
+        });
+    </script>
+</body>
+</html>
